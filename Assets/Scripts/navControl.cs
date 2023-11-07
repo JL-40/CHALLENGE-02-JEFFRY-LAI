@@ -5,26 +5,27 @@ using UnityEngine.AI;
 
 public class navControl : MonoBehaviour
 {
-    public GameObject TargetAttack;
+    public GameObject target;
     private NavMeshAgent agent;
 
     bool isWalking = true;
     Animator animator;
 
-    [field: Header("Speed Control")]
-    [field: Range(0, 10)]
+    [Header("Speed Control")]
 
-    [field: SerializeField] float animationSpeed = 1f;
-    [field: Range(0, 10)]
+    [Range(0, 10)]
+    [SerializeField] float animationSpeed = 1f;
 
-    [field: SerializeField] float navMeshAgentSpeed = 1f;
-    [field: Range(0, 10)]
+    [Range(0, 10)]
+    [SerializeField] float navMeshAgentSpeed = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
+        animator.SetTrigger("WALK");
     }
 
     // Update is called once per frame
@@ -35,7 +36,7 @@ public class navControl : MonoBehaviour
 
         if (isWalking)
         {
-            agent.destination = TargetAttack.transform.position;
+            agent.destination = target.transform.position;
         }
         else
         {
@@ -45,16 +46,16 @@ public class navControl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Dragon")
+        if (other.name == "Target")
         {
             isWalking = false;
-            animator.SetTrigger("ATTACK");
+            animator.SetTrigger("IDLE");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.name == "Dragon")
+        if (other.name == "Target")
         {
             isWalking = true;
             animator.SetTrigger("WALK");
