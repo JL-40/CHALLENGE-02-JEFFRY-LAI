@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class navControl : MonoBehaviour
+public class NavControl : MonoBehaviour
 {
     public GameObject target;
     private NavMeshAgent agent;
@@ -61,4 +61,6 @@ public class navControl : MonoBehaviour
             animator.SetTrigger("WALK");
         }
     }
+
+    public GameObject SetTarget { set { target = value; } }
 }

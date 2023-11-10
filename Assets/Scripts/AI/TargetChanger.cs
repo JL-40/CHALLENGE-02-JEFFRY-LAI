@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class targetChanger : MonoBehaviour
+public class TargetChanger : MonoBehaviour
 {
     [SerializeField] List<Vector3> positionList;
 
-    [SerializeField] int nextPosition = 0;
+    [SerializeField] int nextPositionIndex = 0;
+
+    public GameObject targetObject { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        if (targetObject == null)
+        {
+            targetObject = gameObject;
+        }
+
         if (positionList.Count == 0)
         {
             positionList.Add(transform.position);
@@ -25,21 +32,21 @@ public class targetChanger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Guard"))
+        if (other.CompareTag("Guard") == false)
         {
-            transform.position = positionList[nextPosition];
+            return;
+        }
+
+        if (positionList.Count > 1)
+        {
+            transform.position = positionList[nextPositionIndex];
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Guard")) {
-            nextPosition++;
+            nextPositionIndex++;
         }
     }
-
-    public void FindSuspiciousPlayer(Vector3 playerPosition)
-    {
-        transform.position = playerPosition;
-    } 
 }
