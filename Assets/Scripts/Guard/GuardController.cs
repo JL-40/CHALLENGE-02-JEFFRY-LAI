@@ -44,22 +44,26 @@ public class GuardController : MonoBehaviour
 
             Vector3 targetDirection = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, targetDirection) >= viewAngle / 2)
+            if (Vector3.Angle(transform.forward, targetDirection) < viewAngle / 2)
+            {
+                float targetDistance = Vector3.Distance(transform.position, target.position);
+
+                if (Physics.Raycast(transform.position, targetDirection, targetDistance, obstructionMask) == false)
+                {
+                    canSeePlayer = true;
+
+                    navControl.SetTarget = target.gameObject;
+                }
+                else
+                {
+                    canSeePlayer = false;
+                }
+            }
+            else
             {
                 canSeePlayer = false;
+                navControl.SetTarget = GameManager.Instance.TargetChanger.NextTarget();
             }
-
-            float targetDistance = Vector3.Distance(transform.position, target.position);
-
-            if (Physics.Raycast(transform.position, targetDirection, targetDistance, obstructionMask) == true)
-            {
-                canSeePlayer = false;
-
-            }
-
-            canSeePlayer = true;
-
-            navControl.SetTarget = target.gameObject;
         }
         else if (canSeePlayer == true)
         {

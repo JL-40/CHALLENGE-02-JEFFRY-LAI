@@ -49,4 +49,14 @@ public class TargetChanger : MonoBehaviour
             nextPositionIndex++;
         }
     }
+
+    public GameObject NextTarget()
+    {
+        if (positionList.Count > 1)
+        {
+            transform.position = positionList[nextPositionIndex];
+        }
+
+        return gameObject;
+    }
 }
