@@ -19,6 +19,11 @@ namespace jcsilva.AISystem {
         /// <returns>If self has vision of the target</returns>
         public static bool HasVisionOfTarget(Transform self, Transform target, float maxDistanceRange, float maxFieldOfView) {
 
+            if (target.GetComponent<AreaManager>().inPrivateArea == false)
+            {
+                return false;
+            }
+
             // Calculate the direction between self and the target
             Vector3 direction = target.position - self.position;
 

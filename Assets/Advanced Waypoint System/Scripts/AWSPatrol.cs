@@ -77,6 +77,8 @@ namespace Worq
         private int waypointCount;
         private int destPoint;
 
+        Animator animator;
+
         void Awake()
         {
             mAWSManager = GameObject.FindObjectOfType<AWSManager>();
@@ -84,6 +86,8 @@ namespace Worq
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animation>();
             src = GetComponent<AudioSource>();
+
+            animator = GetComponent<Animator>();
 
             try
             {
@@ -123,8 +127,12 @@ namespace Worq
         void Start()
         {
             anim = GetComponent<Animation>();
+            animator = GetComponent<Animator>();
             if (anim == null)
                 anim = gameObject.AddComponent<Animation>();
+
+            if (animator == null)
+                animator = gameObject.GetComponent<Animator>();
 
             agent.autoBraking = false;
             agent.stoppingDistance = stoppingDistance;
@@ -221,6 +229,12 @@ namespace Worq
             if (idleAnimations != null)
                 playAnimation(idleAnimations);
 
+            if (animator.GetBool("IDLE") == false)
+            {
+                animator.SetBool("WALK", false);
+                animator.SetBool("IDLE", true);
+            }
+
             float waitTime = UnityEngine.Random.Range(minPatrolWaitTime, maxPatrolWaitTime);
             if (waitTime < 0f)
                 waitTime = 1f;
@@ -246,6 +260,12 @@ namespace Worq
 
             if (walkAnimations != null)
                 playAnimation(walkAnimations);
+
+            if (animator.GetBool("WALK") == false)
+            {
+                animator.SetBool("IDLE", false);
+                animator.SetBool("WALK", true);
+            }
             isWaiting = false;
         }
 
@@ -270,6 +290,12 @@ namespace Worq
 
             if (walkAnimations != null)
                 playAnimation(walkAnimations);
+
+            if (animator.GetBool("WALK") == false)
+            {
+                animator.SetBool("IDLE", false);
+                animator.SetBool("WALK", true);
+            }
         }
 
         void RestartPatrol()
@@ -281,6 +307,12 @@ namespace Worq
             agent.stoppingDistance = 1f;
             if (walkAnimations != null)
                 playAnimation(walkAnimations);
+
+            if (animator.GetBool("WALK") == false)
+            {
+                animator.SetBool("IDLE", false);
+                animator.SetBool("WALK", true);
+            }
             goToNextPointDirect();
         }
 
@@ -317,6 +349,12 @@ namespace Worq
             agent.destination = t.position;
             if (walkAnimations != null)
                 playAnimation(walkAnimations);
+
+            if (animator.GetBool("WALK") == false)
+            {
+                animator.SetBool("IDLE", false);
+                animator.SetBool("WALK", true);
+            }
             isWaiting = false;
         }
     }

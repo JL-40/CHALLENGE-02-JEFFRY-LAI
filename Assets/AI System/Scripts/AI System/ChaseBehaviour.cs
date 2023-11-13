@@ -30,14 +30,17 @@ namespace jcsilva.AISystem {
         }
 
         public override void OnBehaviourStart() {
-            isActive = true;
-            selfTransform.LookAt(target);
-            stateMachine.EventAIEnableChase?.Invoke();
+            if (target.GetComponent<AreaManager>().inPrivateArea == true)
+            {
+                isActive = true;
+                selfTransform.LookAt(target);
+                stateMachine.EventAIEnableChase?.Invoke();
 
-            ChasePlayer();
+                ChasePlayer();
 
-            // All things that need to be set when this behaviour starts should be put bellow this comment
-            // example: Animator.SetBool("AnimationRun", true);
+                // All things that need to be set when this behaviour starts should be put bellow this comment
+                // example: Animator.SetBool("AnimationRun", true);
+            }
         }
 
         public override void OnBehaviourEnd() {
@@ -53,10 +56,13 @@ namespace jcsilva.AISystem {
         public override void OnUpdate() {
             if (isActive) {
                 if (AIUtils.HasVisionOfTarget(selfTransform, target, maxDistance, maxFieldOfView)) {
-                    if (AIUtils.IsInRange(selfTransform, target, minDistanceToAttack)) {
+                    if (AIUtils.IsInRange(selfTransform, target, minDistanceToAttack))
+                    {
                         stateMachine.HandleState(AIEvents.InRange);
                         return;
-                    } else {
+                    }
+                    else
+                    {
                         ChasePlayer();
                     }
                 } else {
@@ -67,7 +73,8 @@ namespace jcsilva.AISystem {
 
         }
 
-        private void ChasePlayer() {
+        private void ChasePlayer()
+        {
             selfTransform.LookAt(target);
             agent.SetDestination(target.position);
         }
